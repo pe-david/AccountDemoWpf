@@ -24,6 +24,12 @@ namespace AccountDemoWpf
         public MainWindow()
         {
             InitializeComponent();
+
+            this.WhenActivated(
+                d =>
+                {
+                    this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.txtAmount.IsEnabled);
+                });
         }
 
         public MainWindowViewModel ViewModel
@@ -37,7 +43,7 @@ namespace AccountDemoWpf
                 "ViewModel", 
                 typeof(MainWindowViewModel),
                 typeof(MainWindow),
-                new PropertyMetadata(null));
+                new PropertyMetadata(default(MainWindowViewModel)));
 
         object IViewFor.ViewModel
         {

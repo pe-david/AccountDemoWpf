@@ -21,17 +21,17 @@
 
             <StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
                 <TextBlock Text="Create account:" Margin="2,2,10,2" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
-                <Button Content="Create" Height="32" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
+                <Button x:Name="btnCreateAccount" Content="Create" Height="32" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
             </StackPanel>
 
             <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
                 <TextBlock Text="Amount:" Margin="2,2,10,2" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
-                <TextBox Margin="2,2,10,2" Height="24" Width="60"></TextBox>
-                <ComboBox Margin="2,2,10,2" Height="24" Width="70" SelectedIndex="0">
+                <TextBox x:Name="txtAmount" Margin="2,2,10,2" Height="24" Width="60" IsEnabled="{Binding AccountCreated}"></TextBox>
+                <ComboBox x:Name="cbCreditOrDebit" Margin="2,2,10,2" Height="24" Width="70" SelectedIndex="0">
                     <ComboBoxItem>Credit</ComboBoxItem>
                     <ComboBoxItem>Debit</ComboBoxItem>
                 </ComboBox>
-                <Button Content="Add Credit or Debit" Height="32" Width="140" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
+                <Button x:Name="AddCreditOrDebit" Content="Add Credit or Debit" Height="32" Width="140" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Margin="40, 30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
