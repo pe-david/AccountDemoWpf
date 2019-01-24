@@ -168,6 +168,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MainWindowViewModel.cs" />
     <Compile Include="Messages\AccountCreated.cs" />
     <Compile Include="Messages\ApplyCredit.cs" />
     <Compile Include="Messages\ApplyDebit.cs" />

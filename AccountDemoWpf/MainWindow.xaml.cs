@@ -12,17 +12,37 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ReactiveUI;
 
 namespace AccountDemoWpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : IViewFor<MainWindowViewModel>
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public MainWindowViewModel ViewModel
+        {
+            get => (MainWindowViewModel)GetValue(ViewModelProperty);
+            set => SetValue(ViewModelProperty, value);
+        }
+
+        public static readonly DependencyProperty ViewModelProperty =
+            DependencyProperty.Register(
+                "ViewModel", 
+                typeof(MainWindowViewModel),
+                typeof(MainWindow),
+                new PropertyMetadata(null));
+
+        object IViewFor.ViewModel
+        {
+            get => ViewModel;
+            set => ViewModel = (MainWindowViewModel) value;
         }
 
         private void ExitClick(object sender, RoutedEventArgs e)
