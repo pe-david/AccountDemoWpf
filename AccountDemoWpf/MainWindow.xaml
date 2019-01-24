@@ -7,6 +7,48 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Background="LightSlateGray" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
+                <TextBlock Text="Create account:" Margin="2,2,10,2" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
+                <Button Content="Create" Height="32" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
+                <TextBlock Text="Amount:" Margin="2,2,10,2" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
+                <TextBox Margin="2,2,10,2" Height="24" Width="60"></TextBox>
+                <ComboBox Margin="2,2,10,2" Height="24" Width="70" SelectedIndex="0">
+                    <ComboBoxItem>Credit</ComboBoxItem>
+                    <ComboBoxItem>Debit</ComboBoxItem>
+                </ComboBox>
+                <Button Content="Add Credit or Debit" Height="32" Width="140" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
+            </StackPanel>
+
+        </Grid>
+        <Grid Grid.Column="1" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="4*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <ListBox
+                Grid.Row="0"
+                Grid.RowSpan="4"
+                HorizontalAlignment="Stretch"
+                Height="{Binding ElementName=LayoutRoot, Path=ActualHeight}"></ListBox>
+
+        </Grid>
     </Grid>
 </Window>
