@@ -34,6 +34,10 @@
                 <Button Content="Add Credit or Debit" Height="32" Width="140" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
             </StackPanel>
 
+            <StackPanel Grid.Row="3" Margin="40, 30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Content="Exit" Click="ExitClick" Height="32" Width="60" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
+            </StackPanel>
+
         </Grid>
         <Grid Grid.Column="1" Margin="5">
             <Grid.RowDefinitions>

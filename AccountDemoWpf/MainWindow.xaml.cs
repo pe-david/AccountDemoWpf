@@ -24,5 +24,10 @@ namespace AccountDemoWpf
         {
             InitializeComponent();
         }
+
+        private void ExitClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
