@@ -30,6 +30,8 @@ namespace AccountDemoWpf
                 d =>
                 {
                     d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.txtAmount.IsEnabled));
+                    d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.cbCreditOrDebit.IsEnabled));
+                    d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.btnAddCreditOrDebit.IsEnabled));
                     d(this.BindCommand(ViewModel, vm => vm.CreateAccountCommand, v => v.btnCreateAccount));
                 });
         }

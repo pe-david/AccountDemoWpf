@@ -21,6 +21,8 @@ namespace AccountDemoWpf
         private static IGeneralBus _bus;
         private static IEventStoreConnection _esConnection;
 
+        public static Guid NewAccountId = Guid.NewGuid();
+
         public Bootstrap()
         {
             var fullName = Assembly.GetExecutingAssembly().FullName;

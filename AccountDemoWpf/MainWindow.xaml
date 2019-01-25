@@ -31,7 +31,7 @@
                     <ComboBoxItem>Credit</ComboBoxItem>
                     <ComboBoxItem>Debit</ComboBoxItem>
                 </ComboBox>
-                <Button x:Name="AddCreditOrDebit" Content="Add Credit or Debit" Height="32" Width="140" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
+                <Button x:Name="btnAddCreditOrDebit" Content="Add Credit or Debit" Height="32" Width="140" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Margin="40, 30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
