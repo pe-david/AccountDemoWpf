@@ -1,9 +1,13 @@
 ﻿using AccountDemoWpf.Messages;
 using ReactiveDomain.Bus;
 using System;
+using System.Reactive;
+using System.Reactive.Linq;
 using System.Windows;
 using ReactiveDomain.Domain;
 using ReactiveDomain.EventStore;
+using ReactiveDomain.ReadModel;
+using ReactiveUI;
 using Splat;
 
 namespace AccountDemoWpf
@@ -14,6 +18,9 @@ namespace AccountDemoWpf
                              IHandle<DebitApplied>
     {
         private double balance;
+        //private readonly ObservableAsPropertyHelper<bool> _accountHasBeenCreated;
+
+        //public bool AccountHasBeenCreated => _accountHasBeenCreated.Value;
 
         public AccountRM(Guid accountId)
             : base(() =>
@@ -24,6 +31,8 @@ namespace AccountDemoWpf
                         $"ImageCache: account-{accountId:N}",
                         true))
         {
+            //this.WhenAnyValue(x => x.AccountHasBeenCreated)
+            //    .ToProperty(this, x => x.AccountHasBeenCreated);
             EventStream.Subscribe<AccountCreated>(this);
             EventStream.Subscribe<CreditApplied>(this);
             EventStream.Subscribe<DebitApplied>(this);

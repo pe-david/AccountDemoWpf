@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Windows;
+using AccountDemoWpf.Messages;
 using EventStore.ClientAPI;
 using ReactiveDomain.Bus;
 using ReactiveDomain.Domain;
@@ -20,6 +21,7 @@ namespace AccountDemoWpf
         private static GetEventStoreRepository _esRepository;
         private static IGeneralBus _bus;
         private static IEventStoreConnection _esConnection;
+        private static AccountRM _accountRm;
 
         public static Guid NewAccountId = Guid.NewGuid();
 
@@ -65,9 +67,16 @@ namespace AccountDemoWpf
 
             Configure(_bus);
 
+            _bus.Fire(new CreateAccount(
+                Bootstrap.NewAccountId,
+                "TheAccount",
+                Guid.NewGuid(),
+                Guid.Empty));
+
+            _accountRm = new AccountRM(NewAccountId);
             var mainWindow = new MainWindow()
             {
-                ViewModel = new MainWindowViewModel(_bus)
+                ViewModel = new MainWindowViewModel(_bus, _accountRm, NewAccountId)
             };
 
             mainWindow.Show();
