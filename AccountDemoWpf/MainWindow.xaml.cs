@@ -29,7 +29,8 @@ namespace AccountDemoWpf
             this.WhenActivated(
                 d =>
                 {
-                    this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.txtAmount.IsEnabled);
+                    d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.txtAmount.IsEnabled));
+                    d(this.BindCommand(ViewModel, vm => vm.CreateAccountCommand, v => v.btnCreateAccount));
                 });
         }
 

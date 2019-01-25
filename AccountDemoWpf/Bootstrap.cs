@@ -7,6 +7,7 @@ using EventStore.ClientAPI;
 using ReactiveDomain.Bus;
 using ReactiveDomain.Domain;
 using ReactiveDomain.EventStore;
+using ReactiveUI;
 using Splat;
 
 namespace AccountDemoWpf
@@ -43,6 +44,13 @@ namespace AccountDemoWpf
             Locator.CurrentMutable.RegisterConstant(_esRepository, typeof(IRepository));
 
             _acctSvc = new AccountSvc(bus, _esRepository);
+
+            RegisterViews();
+        }
+
+        private static void RegisterViews()
+        {
+            Locator.CurrentMutable.Register(() => new MainWindow(), typeof(IViewFor<MainWindowViewModel>));
         }
 
         public void Run(StartupEventArgs args)
@@ -54,6 +62,13 @@ namespace AccountDemoWpf
                 TimeSpan.FromMinutes(1));
 
             Configure(_bus);
+
+            var mainWindow = new MainWindow()
+            {
+                ViewModel = new MainWindowViewModel(_bus)
+            };
+
+            mainWindow.Show();
         }
     }
 }

@@ -30,8 +30,8 @@ namespace AccountDemoWpf
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            _bootstrap.Run(e);
             base.OnStartup(e);
+            _bootstrap.Run(e);
         }
     }
 }
