@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EventStore.Projections.Core.Messages;
 using ReactiveUI;
+using SciChart.Core.Extensions;
 
 namespace AccountDemoWpf
 {
@@ -31,6 +32,7 @@ namespace AccountDemoWpf
                 {
                     d(this.Bind(ViewModel, vm => vm.Amount, v => v.txtAmount.Text));
                     d(this.Bind(ViewModel, vm => vm.CreditOrDebitSelection, v => v.cbCreditOrDebit.Text));
+                    d(this.OneWayBind(ViewModel, vm => vm.Output, v => v.ListBoxOutput.ItemsSource));
                     d(this.BindCommand(ViewModel, vm => vm.AddCreditOrDebitCommand, v => v.btnAddCreditOrDebit));
 
                     cbCreditOrDebit.SelectedIndex = 0;

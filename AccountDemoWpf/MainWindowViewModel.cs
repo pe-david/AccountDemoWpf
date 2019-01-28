@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Management;
 using ReactiveDomain.Bus;
 using ReactiveDomain.ViewObjects;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Navigation;
 using AccountDemoWpf.Messages;
 using CenterSpace.NMath.Core;
@@ -19,9 +23,9 @@ namespace AccountDemoWpf
         private Guid _accountId;
         private double? _amount;
         private string _creditOrDebitSelection;
+        private readonly ObservableAsPropertyHelper<string> _accountUpdateMessage;
 
         public ReactiveCommand<Unit, Unit> AddCreditOrDebitCommand;
-        public ReactiveCommand<Unit, Unit> CreateAccountCommand;
 
         public MainWindowViewModel(
                                   IGeneralBus bus,
@@ -32,6 +36,8 @@ namespace AccountDemoWpf
             _bus = bus;
             _accountRm = accountRm;
             _accountId = accountId;
+
+            Output = new ReactiveList<string>() { "one", "two", "three" };
 
             AddCreditOrDebitCommand = CommandBuilder.FromAction(
                 canExecute: this.WhenAnyValue(x => x.Amount, x => x > 0),
@@ -45,6 +51,15 @@ namespace AccountDemoWpf
                     {
                         throw;
                     }
+                });
+
+            _accountRm
+                .AccountUpdateMessage
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(m =>
+                {
+                    if (m == null) m = "It's null";
+                    Output.Add(m);
                 });
         }
 
@@ -76,6 +91,8 @@ namespace AccountDemoWpf
                     throw new InvalidOperationException("User choice must be either credit or debit.");
             }
         }
+
+        public ReactiveList<string> Output { get; set; }
 
         public double? Amount
         {

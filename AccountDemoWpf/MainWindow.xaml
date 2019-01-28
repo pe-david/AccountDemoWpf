@@ -48,10 +48,19 @@
             </Grid.RowDefinitions>
 
             <ListBox
+                x:Name="ListBoxOutput"
                 Grid.Row="0"
                 Grid.RowSpan="4"
                 HorizontalAlignment="Stretch"
-                Height="{Binding ElementName=LayoutRoot, Path=ActualHeight}"></ListBox>
+                Height="{Binding ElementName=LayoutRoot, Path=ActualHeight}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
 
         </Grid>
     </Grid>
