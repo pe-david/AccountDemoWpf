@@ -4,6 +4,7 @@ using ReactiveDomain.ViewObjects;
 using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using AccountDemoWpf.Messages;
 using CenterSpace.NMath.Core;
 using ReactiveUI;
@@ -16,7 +17,7 @@ namespace AccountDemoWpf
         private IGeneralBus _bus;
         private AccountRM _accountRm;
         private Guid _accountId;
-        private double _amount;
+        private double? _amount;
         private string _creditOrDebitSelection;
 
         public ReactiveCommand<Unit, Unit> AddCreditOrDebitCommand;
@@ -33,6 +34,7 @@ namespace AccountDemoWpf
             _accountId = accountId;
 
             AddCreditOrDebitCommand = CommandBuilder.FromAction(
+                canExecute: this.WhenAnyValue(x => x.Amount, x => x > 0),
                 action: () =>
                 {
                     try
@@ -48,31 +50,34 @@ namespace AccountDemoWpf
 
         private void FireCreditOrDebit()
         {
-            if (CreditOrDebitSelection == "Credit")
+            if (!Amount.HasValue || Amount < 0) throw new InvalidOperationException("Amount must be > 0.");
+
+            switch (CreditOrDebitSelection)
             {
-                _bus.Fire(new ApplyCredit(
-                        _accountId,
-                        Amount,
-                        Guid.NewGuid(),
-                        Guid.Empty),
-                    responseTimeout: TimeSpan.FromSeconds(60));
-            }
-            else if (CreditOrDebitSelection == "Debit")
-            {
-                _bus.Fire(new ApplyDebit(
-                        _accountId,
-                        Amount,
-                        Guid.NewGuid(),
-                        Guid.Empty),
-                    responseTimeout: TimeSpan.FromSeconds(60));
-            }
-            else
-            {
-                throw new InvalidOperationException("User choice must be either credit or debit.");
+                case "Credit":
+                    _bus.Fire(new ApplyCredit(
+                            _accountId,
+                            Amount.Value,
+                            Guid.NewGuid(),
+                            Guid.Empty),
+                        responseTimeout: TimeSpan.FromSeconds(60));
+                    break;
+
+                case "Debit":
+                    _bus.Fire(new ApplyDebit(
+                            _accountId,
+                            Amount.Value,
+                            Guid.NewGuid(),
+                            Guid.Empty),
+                        responseTimeout: TimeSpan.FromSeconds(60));
+                    break;
+
+                default:
+                    throw new InvalidOperationException("User choice must be either credit or debit.");
             }
         }
 
-        public double Amount
+        public double? Amount
         {
             get => _amount;
             set => this.RaiseAndSetIfChanged(ref _amount, value);
