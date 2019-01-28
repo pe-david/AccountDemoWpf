@@ -19,7 +19,6 @@ namespace AccountDemoWpf
     {
         private double balance;
         //private readonly ObservableAsPropertyHelper<bool> _accountHasBeenCreated;
-
         //public bool AccountHasBeenCreated => _accountHasBeenCreated.Value;
 
         public AccountRM(Guid accountId)

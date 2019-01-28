@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using AccountDemoWpf.Messages;
+using CenterSpace.NMath.Core;
 using ReactiveUI;
 using Greylock.Common.ViewModels;
 
@@ -16,6 +17,8 @@ namespace AccountDemoWpf
         private bool accountCreated = true;
         private AccountRM _accountRm;
         private Guid _accountId;
+        private double _amount;
+        private string _creditOrDebitSelection;
 
         public ReactiveCommand<Unit, Unit> AddCreditOrDebitCommand;
         public ReactiveCommand<Unit, Unit> CreateAccountCommand;
@@ -30,40 +33,76 @@ namespace AccountDemoWpf
             _accountRm = accountRm;
             _accountId = accountId;
 
-            AddCreditOrDebitCommand = ReactiveCommand.Create(
-                () => { AccountCreated = true; }, null);
+            //CreateAccountCommand = ReactiveCommand.Create(
+            //    () =>
+            //    {
+            //        try
+            //        {
+            //            AccountCreated = true;
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            AccountCreated = false;
+            //        }
+            //    },
+            //    null);
 
-            CreateAccountCommand = ReactiveCommand.Create(
-                () =>
+            AddCreditOrDebitCommand = CommandBuilder.FromAction(
+                action: () =>
                 {
                     try
                     {
-                        AccountCreated = true;
+                        FireCreditOrDebit();
                     }
                     catch (Exception e)
                     {
-                        AccountCreated = false;
+                        throw;
                     }
-                },
-                null);
+                });
+        }
 
-            //CreateAccountCommand = CommandBuilder.FromAction(action: () =>
-            //{
-            //    try
-            //    {
-            //        AccountCreated = true;
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        AccountCreated = false;
-            //    }
-            //}, scheduler: RxApp.MainThreadScheduler);
+        private void FireCreditOrDebit()
+        {
+            if (CreditOrDebitSelection == "Credit")
+            {
+                _bus.Fire(new ApplyCredit(
+                        _accountId,
+                        Amount,
+                        Guid.NewGuid(),
+                        Guid.Empty),
+                    responseTimeout: TimeSpan.FromSeconds(60));
+            }
+            else if (CreditOrDebitSelection == "Debit")
+            {
+                _bus.Fire(new ApplyDebit(
+                        _accountId,
+                        Amount,
+                        Guid.NewGuid(),
+                        Guid.Empty),
+                    responseTimeout: TimeSpan.FromSeconds(60));
+            }
+            else
+            {
+                throw new InvalidOperationException("User choice must be either credit or debit.");
+            }
+        }
+
+        public double Amount
+        {
+            get => _amount;
+            set => this.RaiseAndSetIfChanged(ref _amount, value);
         }
 
         public bool AccountCreated
         {
             get => accountCreated;
             private set => this.RaiseAndSetIfChanged(ref accountCreated, value);
+        }
+
+        public string CreditOrDebitSelection
+        {
+            get => _creditOrDebitSelection;
+            set => this.RaiseAndSetIfChanged(ref _creditOrDebitSelection, value);
         }
     }
 }

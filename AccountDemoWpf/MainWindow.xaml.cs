@@ -29,10 +29,13 @@ namespace AccountDemoWpf
             this.WhenActivated(
                 d =>
                 {
-                    d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.txtAmount.IsEnabled));
+                    d(this.Bind(ViewModel, vm => vm.Amount, v => v.txtAmount.Text));
+                    d(this.Bind(ViewModel, vm => vm.CreditOrDebitSelection, v => v.cbCreditOrDebit.Text));
                     d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.cbCreditOrDebit.IsEnabled));
                     d(this.OneWayBind(ViewModel, vm => vm.AccountCreated, v => v.btnAddCreditOrDebit.IsEnabled));
-                    d(this.BindCommand(ViewModel, vm => vm.CreateAccountCommand, v => v.btnCreateAccount));
+                    d(this.BindCommand(ViewModel, vm => vm.AddCreditOrDebitCommand, v => v.btnAddCreditOrDebit));
+
+                    cbCreditOrDebit.SelectedIndex = 0;
                 });
         }
 
