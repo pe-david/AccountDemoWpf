@@ -19,10 +19,10 @@
                 <RowDefinition Height="4*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
+            <!--<StackPanel Grid.Row="1" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
                 <TextBlock Text="Create account:" Margin="2,2,10,2" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>
                 <Button x:Name="btnCreateAccount" Content="Create" Height="32" Width="50" HorizontalAlignment="Left" VerticalAlignment="Bottom"></Button>
-            </StackPanel>
+            </StackPanel>-->
 
             <StackPanel Grid.Row="2" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="20, 10">
                 <TextBlock Text="Amount:" Margin="2,2,10,2" HorizontalAlignment="Left" VerticalAlignment="Bottom"></TextBlock>

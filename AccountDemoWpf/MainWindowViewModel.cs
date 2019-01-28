@@ -14,7 +14,6 @@ namespace AccountDemoWpf
     public class MainWindowViewModel : ViewModel
     {
         private IGeneralBus _bus;
-        private bool accountCreated = true;
         private AccountRM _accountRm;
         private Guid _accountId;
         private double _amount;
@@ -32,20 +31,6 @@ namespace AccountDemoWpf
             _bus = bus;
             _accountRm = accountRm;
             _accountId = accountId;
-
-            //CreateAccountCommand = ReactiveCommand.Create(
-            //    () =>
-            //    {
-            //        try
-            //        {
-            //            AccountCreated = true;
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            AccountCreated = false;
-            //        }
-            //    },
-            //    null);
 
             AddCreditOrDebitCommand = CommandBuilder.FromAction(
                 action: () =>
@@ -91,12 +76,6 @@ namespace AccountDemoWpf
         {
             get => _amount;
             set => this.RaiseAndSetIfChanged(ref _amount, value);
-        }
-
-        public bool AccountCreated
-        {
-            get => accountCreated;
-            private set => this.RaiseAndSetIfChanged(ref accountCreated, value);
         }
 
         public string CreditOrDebitSelection
