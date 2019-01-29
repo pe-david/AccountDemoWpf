@@ -7,6 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 using AccountDemoWpf.Messages;
@@ -37,7 +38,7 @@ namespace AccountDemoWpf
             _accountRm = accountRm;
             _accountId = accountId;
 
-            Output = new ReactiveList<string>() { "one", "two", "three" };
+            Output = new ReactiveList<string>() { "Initial balance: $0.00" };
 
             AddCreditOrDebitCommand = CommandBuilder.FromAction(
                 canExecute: this.WhenAnyValue(x => x.Amount, x => x > 0),
@@ -49,7 +50,7 @@ namespace AccountDemoWpf
                     }
                     catch (Exception e)
                     {
-                        throw;
+                        Application.Current.Dispatcher.Invoke(() => Output.Add(e.Message));
                     }
                 });
 
@@ -58,8 +59,10 @@ namespace AccountDemoWpf
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(m =>
                 {
-                    if (m == null) m = "It's null";
-                    Output.Add(m);
+                    if (m != null)
+                    {
+                        Output.Add(m);
+                    }
                 });
         }
 
