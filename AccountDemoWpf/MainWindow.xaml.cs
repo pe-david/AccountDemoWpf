@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AccountDemoWpf.Converters;
 using EventStore.Projections.Core.Messages;
 using ReactiveUI;
 using SciChart.Core.Extensions;

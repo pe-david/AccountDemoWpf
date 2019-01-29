@@ -266,6 +266,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrap.cs" />
+    <Compile Include="Converters\TextBoxConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
