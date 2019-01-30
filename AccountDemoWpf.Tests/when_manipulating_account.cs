@@ -59,24 +59,14 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_create_duplicate_account()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(1500));
-
             Assert.Throws<CommandException>(
                 () =>
                 {
                     Bus.Fire(
                         new CreateAccount(
-                            accountId,
+                            _accountId,
                             "DuplicateAccount",
-                            correlationId,
+                            _correlationId,
                             null),
                         responseTimeout: TimeSpan.FromMilliseconds(1500));
                 });
@@ -146,16 +136,6 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_credit_with_empty_account_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
@@ -163,7 +143,7 @@ namespace AccountDemoWpf.Tests
                     Bus.Fire(new ApplyCredit(
                             Guid.Empty,
                             amountCredited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -172,23 +152,13 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_credit_with_empty_correlation_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
                 {
                     Bus.Fire(
                         new ApplyCredit(
-                            accountId,
+                            _accountId,
                             amountCredited,
                             Guid.Empty,
                             Guid.Empty),
@@ -199,16 +169,6 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_debit_with_empty_account_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountDebited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
@@ -216,7 +176,7 @@ namespace AccountDemoWpf.Tests
                     Bus.Fire(new ApplyDebit(
                             Guid.Empty,
                             amountDebited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -225,23 +185,13 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_debit_with_empty_correlation_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
                 {
                     Bus.Fire(
                         new ApplyDebit(
-                            accountId,
+                            _accountId,
                             amountCredited,
                             Guid.Empty,
                             Guid.Empty),
@@ -252,16 +202,6 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_debit_with_wrong_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountDebited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
@@ -269,7 +209,7 @@ namespace AccountDemoWpf.Tests
                     Bus.Fire(new ApplyCredit(
                             Guid.NewGuid(),
                             amountDebited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -278,16 +218,6 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_credit_with_wrong_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
@@ -295,7 +225,7 @@ namespace AccountDemoWpf.Tests
                     Bus.Fire(new ApplyCredit(
                             Guid.NewGuid(),
                             amountCredited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -327,24 +257,14 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_debit_a_negative_amount()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountDebited = -123.45;
             Assert.Throws<ArgumentOutOfRangeException>(
                 () =>
                 {
                     Bus.Fire(new ApplyDebit(
-                            accountId,
+                            _accountId,
                             amountDebited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -353,24 +273,14 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_credit_a_negative_amount()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = -123.45;
             Assert.Throws<ArgumentOutOfRangeException>(
                 () =>
                 {
                     Bus.Fire(new ApplyCredit(
-                            accountId,
+                            _accountId,
                             amountCredited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -379,24 +289,14 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void cannot_apply_debit_with_negative_balance()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
-            const double amountDebited = 123.45;
+            const double amountDebited = 2000;
             Assert.Throws<CommandException>(
                 () =>
                 {
                     Bus.Fire(new ApplyDebit(
-                            accountId,
+                            _accountId,
                             amountDebited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -405,16 +305,6 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void debit_fails_when_wrong_account_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountDebited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
@@ -422,7 +312,7 @@ namespace AccountDemoWpf.Tests
                     Bus.Fire(new ApplyDebit(
                             Guid.NewGuid(),
                             amountDebited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
@@ -431,16 +321,6 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void credit_fails_when_wrong_account_id()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = 123.45;
             Assert.Throws<CommandException>(
                 () =>
@@ -448,7 +328,7 @@ namespace AccountDemoWpf.Tests
                     Bus.Fire(new ApplyCredit(
                             Guid.NewGuid(),
                             amountCredited,
-                            correlationId,
+                            _correlationId,
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
