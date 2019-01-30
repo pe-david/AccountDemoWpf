@@ -474,6 +474,17 @@ namespace AccountDemoWpf.Tests
             var accountId = Guid.NewGuid();
             var vm = new MainWindowViewModel(Bus, null, accountId);
 
+            var canExecute = true;
+            var canExecuteCmd = vm.AddCreditOrDebitCommand.CanExecute;
+
+            using (canExecuteCmd.Subscribe(x => canExecute = x))
+            {
+                vm.Amount = -10;
+                Assert.IsOrBecomesFalse(() => canExecute);
+
+                vm.Amount = 10;
+                Assert.IsOrBecomesTrue(() => canExecute);
+            }
         }
 
         public void Handle(AccountCreated message)
