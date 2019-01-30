@@ -1,7 +1,10 @@
 ﻿using System;
 using AccountDemoWpf.Messages;
+using Greylock.Common.Tests.Helpers;
 using ReactiveDomain.Bus;
 using Xunit;
+using Assert = Xunit.Assert;
+using TestHelpers = Greylock.Common.Tests.Helpers.Assert;
 
 namespace AccountDemoWpf.Tests
 {
@@ -12,6 +15,8 @@ namespace AccountDemoWpf.Tests
                         IHandle<CreditApplied>,
                         IHandle<DebitApplied>
     {
+        private readonly Guid validAccountId = Guid.NewGuid();
+
         protected override void When()
         {
 
@@ -464,6 +469,23 @@ namespace AccountDemoWpf.Tests
                             Guid.Empty),
                         responseTimeout: TimeSpan.FromSeconds(60));
                 });
+        }
+
+        [Fact]
+        public void command_enabled_with_valid_amount()
+        {
+            var guid = Guid.NewGuid();
+            var readModel = new AccountRM(guid);
+            var bus = new CommandBus(
+                "Main Bus",
+                false);
+
+            //var vm = new MainWindowViewModel(Bus, new AccountRM(Guid.NewGuid()), Guid.NewGuid());
+            var vm = new MainWindowViewModel(bus, readModel, guid)
+            {
+                Amount = 10
+            };
+            TestHelpers.CanExecute(vm.AddCreditOrDebitCommand);
         }
 
         public void Handle(AccountCreated message)

@@ -1,6 +1,5 @@
 ﻿using ReactiveDomain.Tests.Specifications;
 using System;
-using AccountDemoWpf;
 
 namespace AccountDemoWpf.Tests
 {
