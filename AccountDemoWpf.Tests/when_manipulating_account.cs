@@ -1,6 +1,7 @@
 ﻿using System;
 using AccountDemoWpf.Messages;
 using ReactiveDomain.Bus;
+using ReactiveDomain.Domain;
 using ReactiveDomain.Messaging;
 using Xunit;
 
@@ -15,8 +16,19 @@ namespace AccountDemoWpf.Tests
                         IHandleCommand<ApplyCredit>,
                         IHandleCommand<ApplyDebit>
     {
+        private Guid _accountId;
+        private Guid _correlationId;
+        private Account _account;
+
         protected override void When()
         {
+            _accountId = Guid.NewGuid();
+            _correlationId = Guid.NewGuid();
+            _account = new Account(_accountId, "TestAccount", _correlationId, Guid.NewGuid());
+            Repository.Save(_account, Guid.NewGuid());
+
+            _account.ApplyCredit(_accountId, 1000, _correlationId, Guid.NewGuid());
+            Repository.Save(_account, Guid.NewGuid());
         }
 
         [Fact]
@@ -34,6 +46,9 @@ namespace AccountDemoWpf.Tests
 
             BusCommands.AssertNext<CreateAccount>(correlationId, out var cmd)
                        .AssertEmpty();
+
+            RepositoryEvents.DequeueNext<AccountCreated>();
+            RepositoryEvents.DequeueNext<CreditApplied>();
 
             RepositoryEvents.AssertNext<AccountCreated>(correlationId, out var evt)
                             .AssertEmpty();
@@ -108,31 +123,21 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void can_apply_credit()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
             const double amountCredited = 123.45;
             Bus.Fire(new ApplyCredit(
-                    accountId,
+                    _accountId,
                     amountCredited,
-                    correlationId,
+                    _correlationId,
                     Guid.Empty),
                 responseTimeout: TimeSpan.FromSeconds(60));
 
-            BusCommands.DequeueNext<CreateAccount>();
-            RepositoryEvents.DequeueNext<AccountCreated>();
-
-            BusCommands.AssertNext<ApplyCredit>(correlationId, out var cmd)
+            BusCommands.AssertNext<ApplyCredit>(_correlationId, out var cmd)
                 .AssertEmpty();
 
-            RepositoryEvents.AssertNext<CreditApplied>(correlationId, out var evt)
+            RepositoryEvents.DequeueNext<AccountCreated>();
+            RepositoryEvents.DequeueNext<CreditApplied>();
+
+            RepositoryEvents.AssertNext<CreditApplied>(_correlationId, out var evt)
                 .AssertEmpty();
 
             Assert.Equal(amountCredited, evt.Amount);
@@ -299,43 +304,24 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void can_apply_debit()
         {
-            var accountId = Guid.NewGuid();
-            var correlationId = Guid.NewGuid();
-            Bus.Fire(
-                new CreateAccount(
-                    accountId,
-                    "NewAccount",
-                    correlationId,
-                    null),
-                responseTimeout: TimeSpan.FromMilliseconds(3000));
-
-            const double amount = 123.45;
-            Bus.Fire(new ApplyCredit(
-                    accountId,
-                    amount,
-                    correlationId,
-                    Guid.Empty),
-                responseTimeout: TimeSpan.FromSeconds(60));
-
+            const double amountDebited = 123.45;
             Bus.Fire(new ApplyDebit(
-                    accountId,
-                    amount,
-                    correlationId,
+                    _accountId,
+                    amountDebited,
+                    _correlationId,
                     Guid.Empty),
                 responseTimeout: TimeSpan.FromSeconds(60));
 
-            BusCommands.DequeueNext<CreateAccount>();
-            BusCommands.DequeueNext<ApplyCredit>();
+            BusCommands.AssertNext<ApplyDebit>(_correlationId, out var cmd)
+                .AssertEmpty();
+
             RepositoryEvents.DequeueNext<AccountCreated>();
             RepositoryEvents.DequeueNext<CreditApplied>();
 
-            BusCommands.AssertNext<ApplyDebit>(correlationId, out var cmd)
+            RepositoryEvents.AssertNext<DebitApplied>(_correlationId, out var evt)
                 .AssertEmpty();
 
-            RepositoryEvents.AssertNext<DebitApplied>(correlationId, out var evt)
-                .AssertEmpty();
-
-            Assert.Equal(amount, evt.Amount);
+            Assert.Equal(amountDebited, evt.Amount);
         }
 
         [Fact]
@@ -485,6 +471,18 @@ namespace AccountDemoWpf.Tests
                 vm.Amount = 10;
                 Assert.IsOrBecomesTrue(() => canExecute);
             }
+        }
+
+        [Fact]
+        public void dropdown_determines_credit_or_debit()
+        {
+            var vm = new MainWindowViewModel(Bus, null, _accountId)
+            {
+                Amount = 100,
+                CreditOrDebitSelection = "Debit"
+            };
+
+            var test = vm.AddCreditOrDebitCommand.Execute();
         }
 
         public void Handle(AccountCreated message)
