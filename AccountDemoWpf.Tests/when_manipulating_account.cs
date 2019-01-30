@@ -1,10 +1,8 @@
 ﻿using System;
 using AccountDemoWpf.Messages;
-using Greylock.Common.Tests.Helpers;
 using ReactiveDomain.Bus;
+using ReactiveDomain.Messaging;
 using Xunit;
-using Assert = Xunit.Assert;
-using TestHelpers = Greylock.Common.Tests.Helpers.Assert;
 
 namespace AccountDemoWpf.Tests
 {
@@ -13,13 +11,12 @@ namespace AccountDemoWpf.Tests
                         with_account_service,
                         IHandle<AccountCreated>,
                         IHandle<CreditApplied>,
-                        IHandle<DebitApplied>
+                        IHandle<DebitApplied>,
+                        IHandleCommand<ApplyCredit>,
+                        IHandleCommand<ApplyDebit>
     {
-        private readonly Guid validAccountId = Guid.NewGuid();
-
         protected override void When()
         {
-
         }
 
         [Fact]
@@ -474,18 +471,9 @@ namespace AccountDemoWpf.Tests
         [Fact]
         public void command_enabled_with_valid_amount()
         {
-            var guid = Guid.NewGuid();
-            var readModel = new AccountRM(guid);
-            var bus = new CommandBus(
-                "Main Bus",
-                false);
+            var accountId = Guid.NewGuid();
+            var vm = new MainWindowViewModel(Bus, null, accountId);
 
-            //var vm = new MainWindowViewModel(Bus, new AccountRM(Guid.NewGuid()), Guid.NewGuid());
-            var vm = new MainWindowViewModel(bus, readModel, guid)
-            {
-                Amount = 10
-            };
-            TestHelpers.CanExecute(vm.AddCreditOrDebitCommand);
         }
 
         public void Handle(AccountCreated message)
@@ -498,6 +486,16 @@ namespace AccountDemoWpf.Tests
 
         public void Handle(DebitApplied message)
         {
+        }
+
+        public CommandResponse Handle(ApplyCredit command)
+        {
+            return command.Succeed();
+        }
+
+        public CommandResponse Handle(ApplyDebit command)
+        {
+            return command.Succeed();
         }
 
         //public void Dispose()

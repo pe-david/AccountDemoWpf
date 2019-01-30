@@ -74,17 +74,8 @@
     <Reference Include="Greylock.Common, Version=0.6.6956.33175, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Greylock.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Greylock.Common.Tests, Version=0.6.6956.33181, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Greylock.Tests.0.6.6956.33181\lib\Greylock.Common.Tests.dll</HintPath>
-    </Reference>
     <Reference Include="Greylock.Computation, Version=0.6.6956.33193, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Greylock.Computation.dll</HintPath>
-    </Reference>
-    <Reference Include="Greylock.Computation.Tests, Version=0.6.6956.33306, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Greylock.Tests.0.6.6956.33181\lib\Greylock.Computation.Tests.dll</HintPath>
-    </Reference>
-    <Reference Include="Greylock.Domain.Tests, Version=0.6.6956.33180, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Greylock.Tests.0.6.6956.33181\lib\Greylock.Domain.Tests.dll</HintPath>
     </Reference>
     <Reference Include="Greylock.EventStore.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Greylock.EventStore.Service.exe</HintPath>
@@ -95,20 +86,11 @@
     <Reference Include="Greylock.Presentation.Core, Version=0.6.6956.33267, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Greylock.Presentation.Core.exe</HintPath>
     </Reference>
-    <Reference Include="Greylock.Presentation.Tests, Version=0.6.6956.33306, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Greylock.Tests.0.6.6956.33181\lib\Greylock.Presentation.Tests.dll</HintPath>
-    </Reference>
     <Reference Include="Greylock.StudyManagement, Version=0.6.6956.33188, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Greylock.StudyManagement.dll</HintPath>
     </Reference>
-    <Reference Include="Greylock.StudyManagement.Tests, Version=0.6.6956.33198, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Greylock.Tests.0.6.6956.33181\lib\Greylock.StudyManagement.Tests.dll</HintPath>
-    </Reference>
     <Reference Include="Greylock.Workflow, Version=0.6.6956.33182, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Greylock.Workflow.dll</HintPath>
-    </Reference>
-    <Reference Include="Greylock.Workflow.Tests, Version=0.6.6956.33186, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\Greylock.Tests.0.6.6956.33181\lib\Greylock.Workflow.Tests.dll</HintPath>
     </Reference>
     <Reference Include="Infralution.Licensing.WPF, Version=6.2.0.0, Culture=neutral, PublicKeyToken=3e7e8e3744a5c13f, processorArchitecture=MSIL">
       <HintPath>..\packages\Greylock.0.6.6956.33175\lib\Infralution.Licensing.WPF.dll</HintPath>
@@ -152,9 +134,11 @@
       <HintPath>..\packages\ReactiveDomain.Tests.0.7.6571.37067\lib\ReactiveDomain.Tests.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ReactiveUI.8.0.0\lib\net461\ReactiveUI.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\reactiveui-core.7.4.0\lib\Net45\ReactiveUI.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI.Events, Version=7.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\reactiveui-events.7.3.0\lib\Net45\ReactiveUI.Events.dll</HintPath>
     </Reference>
     <Reference Include="SciChart.Charting, Version=5.1.1.11473, Culture=neutral, PublicKeyToken=b55dd9efe817e823, processorArchitecture=MSIL">
@@ -251,7 +235,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrap.cs" />
     <Compile Include="when_manipulating_account.cs" />
     <Compile Include="with_account_service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

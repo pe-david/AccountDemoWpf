@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Management;
+﻿using AccountDemoWpf.Messages;
+using Greylock.Common.ViewModels;
 using ReactiveDomain.Bus;
 using ReactiveDomain.ViewObjects;
+using ReactiveUI;
+using System;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
-using System.Windows.Navigation;
-using AccountDemoWpf.Messages;
-using CenterSpace.NMath.Core;
-using ReactiveUI;
-using Greylock.Common.ViewModels;
 
 namespace AccountDemoWpf
 {
@@ -24,15 +16,14 @@ namespace AccountDemoWpf
         private Guid _accountId;
         private double? _amount;
         private string _creditOrDebitSelection;
-        private readonly ObservableAsPropertyHelper<string> _accountUpdateMessage;
+   //     private readonly ObservableAsPropertyHelper<string> _accountUpdateMessage;
 
         public ReactiveCommand<Unit, Unit> AddCreditOrDebitCommand;
 
         public MainWindowViewModel(
                                   IGeneralBus bus,
                                   AccountRM accountRm,
-                                  Guid accountId,
-                                  EditMode editMode = EditMode.Add) : base(bus, editMode)
+                                  Guid accountId) : base(bus)
         {
             _bus = bus;
             _accountRm = accountRm;
@@ -50,11 +41,11 @@ namespace AccountDemoWpf
                     }
                     catch (Exception e)
                     {
-                        Application.Current.Dispatcher.Invoke(() => Output.Add(e.Message));
+                        //Application.Current.Dispatcher.Invoke(() => Output.Add(e.Message));
                     }
                 });
 
-            _accountRm
+            _accountRm?
                 .AccountUpdateMessage
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(m =>
