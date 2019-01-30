@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AccountDemoWpf.Messages;
 using ReactiveDomain.Bus;
 using ReactiveDomain.Domain;
@@ -358,11 +359,16 @@ namespace AccountDemoWpf.Tests
         {
             var vm = new MainWindowViewModel(Bus, null, _accountId)
             {
-                Amount = 100,
-                CreditOrDebitSelection = "Debit"
+                Amount = 100
             };
 
-            var test = vm.AddCreditOrDebitCommand.Execute();
+            vm.CreditOrDebitSelection = "Debit";
+            vm.AddCreditOrDebitCommand.Execute();
+            Assert.IsType<ApplyDebit>(BusCommands.First());
+
+            vm.CreditOrDebitSelection = "Credit";
+            vm.AddCreditOrDebitCommand.Execute();
+            Assert.IsType<ApplyCredit>(BusCommands.Skip(1).First());
         }
 
         public void Handle(AccountCreated message)
