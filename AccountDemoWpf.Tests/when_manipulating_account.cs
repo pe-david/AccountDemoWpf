@@ -30,6 +30,9 @@ namespace AccountDemoWpf.Tests
 
             _account.ApplyCredit(_accountId, 1000, _correlationId, Guid.NewGuid());
             Repository.Save(_account, Guid.NewGuid());
+
+            RepositoryEvents.DequeueNext<AccountCreated>();
+            RepositoryEvents.DequeueNext<CreditApplied>();
         }
 
         [Fact]
@@ -47,9 +50,6 @@ namespace AccountDemoWpf.Tests
 
             BusCommands.AssertNext<CreateAccount>(correlationId, out var cmd)
                        .AssertEmpty();
-
-            RepositoryEvents.DequeueNext<AccountCreated>();
-            RepositoryEvents.DequeueNext<CreditApplied>();
 
             RepositoryEvents.AssertNext<AccountCreated>(correlationId, out var evt)
                             .AssertEmpty();
@@ -124,9 +124,6 @@ namespace AccountDemoWpf.Tests
 
             BusCommands.AssertNext<ApplyCredit>(_correlationId, out var cmd)
                 .AssertEmpty();
-
-            RepositoryEvents.DequeueNext<AccountCreated>();
-            RepositoryEvents.DequeueNext<CreditApplied>();
 
             RepositoryEvents.AssertNext<CreditApplied>(_correlationId, out var evt)
                 .AssertEmpty();
@@ -245,9 +242,6 @@ namespace AccountDemoWpf.Tests
 
             BusCommands.AssertNext<ApplyDebit>(_correlationId, out var cmd)
                 .AssertEmpty();
-
-            RepositoryEvents.DequeueNext<AccountCreated>();
-            RepositoryEvents.DequeueNext<CreditApplied>();
 
             RepositoryEvents.AssertNext<DebitApplied>(_correlationId, out var evt)
                 .AssertEmpty();
